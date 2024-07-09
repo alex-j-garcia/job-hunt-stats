@@ -1,0 +1,26 @@
+{
+  "name": "job-hunt-stats",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "ts": "tsc -w",
+    "serve": "cd dist && web-dev-server --node-resolve --watch --open --app-index index.html",
+    "build": "tsc && webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "~9.6.0",
+    "@web/dev-server": "~0.4.6",
+    "eslint": "~9.6.0",
+    "globals": "~15.8.0",
+    "typescript": "~5.5.3",
+    "typescript-eslint": "~7.16.0",
+    "webpack": "~5.92.1",
+    "webpack-cli": "~5.1.4"
+  },
+  "overrides": {
+    "eslint": "~9.6.0"
+  }
+}
