@@ -1,4 +1,4 @@
-import { Position } from "../types/position";
+import { Position, ConcisePosition } from "../types/position";
 import { QueryDocumentSnapshot, SnapshotOptions } from "@firebase/firestore";
 
 // Import the functions you need from the SDKs you need
@@ -49,26 +49,23 @@ const collectionRef = collection(db, "openings").withConverter(
   positionConverter
 );
 
-async function getAllAppliedPositions(): Promise<Position[]> {
-  const docsRef = await getDocs(collectionRef);
-  return docsRef.docs.map((doc) => doc.data());
-}
-
-async function getAppliedPositionsByEmployer(
-  employer: string
-): Promise<Position[]> {
-  const q = query(collectionRef, where("company_name", "==", employer));
-  const docsRef = await getDocs(q);
-  return docsRef.docs.map((doc) => doc.data());
-}
-
-async function addPosition(position: Position): Promise<void> {
-  const docRef = await addDoc(collectionRef, position);
-  console.log(`Document written with ID: ${docRef.id}`);
-}
-
 export default {
-  getAllAppliedPositions,
-  getAppliedPositionsByEmployer,
-  addPosition,
+  async getJobPosts(filter?: string): Promise<ConcisePosition[]> {
+    const docsRef = await getDocs(collectionRef);
+    const data = docsRef.docs.map((doc) => doc.data());
+    const posts = data.map(({ company_name, position_name }) => ({
+      company_name,
+      position_name,
+    }));
+
+    if (filter) {
+      return posts.filter((post) => post.company_name === filter);
+    }
+
+    return posts;
+  },
+  async addPosition(position: Position): Promise<void> {
+    const docRef = await addDoc(collectionRef, position);
+    console.log(`Document written with ID: ${docRef.id}`);
+  },
 };

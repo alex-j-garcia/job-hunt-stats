@@ -1,5 +1,5 @@
 export type Position = {
-  address: Address;
+  address: Address | "remote";
   company_name: string;
   date_applied: Date;
   date_contacted: null | Date;
@@ -15,10 +15,36 @@ export type Position = {
   is_fishy: boolean;
   is_application_confirmed: boolean;
   was_rejected: boolean;
+  recruiterID: string | null;
+  internalID: string | null;
+  status: number;
+};
+
+type Status = {
+  status:
+    | "applied"
+    | "recruiter interview"
+    | "first interview"
+    | "second interview"
+    | "third interview"
+    | "technical assesment"
+    | "final interview"
+    | "offer made";
+};
+
+type Recruiter = {
+  name: string;
+  surname: string;
+  was_ghosted: boolean;
 };
 
 type Address = {
   state: string;
   street_address: string;
   city: string;
+};
+
+export type ConcisePosition = {
+  company_name: string;
+  position_name: string;
 };

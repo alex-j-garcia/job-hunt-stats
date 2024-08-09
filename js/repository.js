@@ -28,21 +28,21 @@ const app = (0, app_1.initializeApp)(firebaseConfig);
 // Initialize FireStore and get a reference to the service
 const db = (0, firestore_1.getFirestore)(app);
 const collectionRef = (0, firestore_1.collection)(db, "openings").withConverter(positionConverter);
-async function getAllAppliedPositions() {
-    const docsRef = await (0, firestore_1.getDocs)(collectionRef);
-    return docsRef.docs.map((doc) => doc.data());
-}
-async function getAppliedPositionsByEmployer(employer) {
-    const q = (0, firestore_1.query)(collectionRef, (0, firestore_1.where)("company_name", "==", employer));
-    const docsRef = await (0, firestore_1.getDocs)(q);
-    return docsRef.docs.map((doc) => doc.data());
-}
-async function addPosition(position) {
-    const docRef = await (0, firestore_1.addDoc)(collectionRef, position);
-    console.log(`Document written with ID: ${docRef.id}`);
-}
 exports.default = {
-    getAllAppliedPositions,
-    getAppliedPositionsByEmployer,
-    addPosition,
+    async getJobPosts(filter) {
+        const docsRef = await (0, firestore_1.getDocs)(collectionRef);
+        const data = docsRef.docs.map((doc) => doc.data());
+        const posts = data.map(({ company_name, position_name }) => ({
+            company_name,
+            position_name,
+        }));
+        if (filter) {
+            return posts.filter((post) => post.company_name === filter);
+        }
+        return posts;
+    },
+    async addPosition(position) {
+        const docRef = await (0, firestore_1.addDoc)(collectionRef, position);
+        console.log(`Document written with ID: ${docRef.id}`);
+    },
 };
